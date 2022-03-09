@@ -28,6 +28,14 @@ app.post('/', async (req, res) => {
     });
 })
 
+app.delete('/:id', async (req, res) => {
+    await Product.findByIdAndDelete(req.params.id)
+
+    res.json({
+        success: true,
+        data: 'malumot ochirildi',
+    });
+})
 
 const PORT = 8080
 app.listen(PORT, () => {
