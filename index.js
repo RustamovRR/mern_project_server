@@ -1,8 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose');
-const Product = require('./schema')
 const app = express()
+const productRouter = require('./product')
 
 const URL = 'mongodb+srv://RustamovRR:jcczSIMWaXmibBL6@cluster0.trxte.mongodb.net/myFirstDatabase'
 
@@ -10,32 +10,7 @@ mongoose.connect(URL).then(() => console.log('bazaga ulandi'))
 
 app.use(express.json())
 app.use(cors())
-
-app.get('/', async (req, res) => {
-    const products = await Product.find()
-
-    res.status(200).send({
-        results: products
-    })
-})
-
-app.post('/', async (req, res) => {
-    const product = await Product.create(req.body);
-
-    res.status(201).json({
-        success: true,
-        data: product,
-    });
-})
-
-app.delete('/:id', async (req, res) => {
-    await Product.findByIdAndDelete(req.params.id)
-
-    res.json({
-        success: true,
-        data: 'malumot ochirildi',
-    });
-})
+app.use('/', productRouter)
 
 const PORT = 8080
 app.listen(PORT, () => {
